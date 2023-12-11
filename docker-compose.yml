@@ -1,0 +1,37 @@
+version: "3"
+
+services:
+  mymongodb:
+    image: mongo
+    container_name: mymongodb
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=pass
+    networks:
+      - maven-mongo-network
+
+  mymongodb-express:
+    image: mongo-express
+    container_name: mymongo-express
+    ports:
+      - "8081:8081"
+    environment:
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=admin
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=pass
+      - ME_CONFIG_MONGODB_SERVER=mymongodb
+    networks:
+      - maven-mongo-network
+
+  mvn-crud:
+    image: mvn-crud:latest
+    ports:
+      - "8080:8080"
+    
+    networks:
+      - maven-mongo-network
+
+networks:
+  maven-mongo-network:
+    driver: bridge
